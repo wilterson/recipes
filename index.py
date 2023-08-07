@@ -131,31 +131,24 @@ def scrape_recipe(path):
 if __name__ == "__main__":
     scraper = cloudscraper.create_scraper()
 
-    # page = 11
-    # while page <= 20:
-    #     print(f'Getting page {page}...')
-    #     try:
-    #         page_urls = get_page_urls(page)
-    #     except Exception as e:
-    #         logging.error(e)
-    #         continue
+    page = 1
+    while page <= 100:
+        print(f'Getting page {page}...')
+        try:
+            page_urls = get_page_urls(page)
+        except Exception as e:
+            logging.error(e)
+            continue
 
-    #     for url in page_urls:
-    #         recipe = get_item('recipes', url)
+        for url in page_urls:
+            recipe = get_item('recipes', url)
 
-    #         if recipe is not None:
-    #             print(f'Recipe: {url} already exists on DB...')
-    #             logging.info("Recipe: %s already exists on DB...", url)
+            if recipe is not None:
+                print(f'Recipe: {url} already exists on DB...')
+                logging.info("Recipe: %s already exists on DB...", url)
 
-    #             continue
+                continue
 
-    #         scrape_recipe(url)
+            scrape_recipe(url)
 
-    #     page += 1
-
-    # get all recipes from DB
-    recipes = get_all_items('recipes')
-
-    for recipe in recipes:
-        ingredients = recipe['ingredients']
-        nlp_entities(ingredients)
+        page += 1
