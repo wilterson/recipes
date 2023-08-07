@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  dynamodb:
+    image: amazon/dynamodb-local
+    entrypoint: java
+    command: '-jar DynamoDBLocal.jar -sharedDb -dbPath /data'
+    expose:
+      - 8000
+    ports:
+      - 8000:8000
+    user: root
+    volumes:
+      - ./.docker/dynamodb/:/data
+
+  dynamodb.gui:
+    container_name: dynamodb_admin
+    image: aaronshaf/dynamodb-admin
+    expose:
+      - 8001
+    ports:
+      - 8001:8001
+    environment:
+      DYNAMO_ENDPOINT: "http://dynamodb:8000"
+      AWS_REGION: "us-east-1"
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
+    depends_on:
+      - dynamodb
+    links:
+      - dynamodb
